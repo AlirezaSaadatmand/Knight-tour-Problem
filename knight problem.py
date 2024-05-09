@@ -13,7 +13,7 @@ blocks = []
 count_block = 8
 
 
-knight_position = 3
+knight_position = 1
 
 class Block:
     def __init__(self , xpos , ypos , x , y , id , color):
@@ -60,7 +60,8 @@ class Block:
         if lst:
             r = lst.index(min(lst))
             return self.neighbors[r].id
-    
+        else:
+            return False
     def draw(self):
         if self.checked :
             self.color = "yellow"
@@ -92,17 +93,15 @@ def create_board():
 create_board()
 
 def move(knight_position):
+
     for block in blocks:
         if block.id == knight_position:
             block.get_neighbor()
-            return block.move()
-            
+            return block.move()          
 
 def draw(screen):
     screen.fill("#f59563")
     for block in blocks:
-        if block.id == knight_position:
-            block.checked = True
         block.draw()
 
 
@@ -112,13 +111,24 @@ screen.fill("#f59563")
 pygame.display.set_caption("KNIGHT PROBLEM")
 clock = pygame.time.Clock()
 
+running = True
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-    draw(screen)
-    knight_position = move(knight_position)
+    if running:    
+        knight_position = move(knight_position)
+        if knight_position == False:
+            for block in blocks:
+                if block.checked == False:
+                    knight_position = block.id
+                    running = False
+        for block in blocks:
+            if block.id == knight_position:
+                block.checked = True
+                
+        draw(screen)
     pygame.display.update()
-    clock.tick(5)
+    clock.tick(10)
