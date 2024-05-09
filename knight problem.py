@@ -81,7 +81,7 @@ def create_board():
         x = (WIDTH / 2) - (UNIT * count_block / 2)
         for j in range(count_block):
             blocks.append(Block( j , i , x , y , id , color))
-            if id % 8 != 0:
+            if id % count_block != 0:
                 if color == "white":
                     color = "black"
                 else:
