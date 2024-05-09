@@ -1,0 +1,1 @@
+This project solves the knight problem and uses pygamee for gui
