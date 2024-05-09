@@ -13,7 +13,7 @@ blocks = []
 count_block = 8
 
 
-first_block = 1
+knight_position = 1
 
 class Block:
     def __init__(self , xpos , ypos , x , y , id , color):
@@ -25,7 +25,7 @@ class Block:
         self.y = y
         self.checked = False
         
-        self.neighbers = []
+        self.neighbors = []
 
         self.id = id
         self.color = color
@@ -35,6 +35,7 @@ class Block:
             self.text_color = "white"
     
     def get_neighbor(self):
+        self.neighbors = []
         x = self.xpos
         y = self.ypos
         topLeft = [x-1 , y -2]
@@ -47,10 +48,23 @@ class Block:
         rightButtom = [x+2 , y +1]
         
         for block in blocks:
-            if [block.xpos , block.ypos] in [topLeft , topRight , buttomLeft , buttomRight , leftTop , leftButtom , rightTop , rightButtom]:
-                self.neighbers.append(block)
-                
+            if [block.xpos , block.ypos] in [topLeft , topRight , buttomLeft , buttomRight , leftTop , leftButtom , rightTop , rightButtom] and block.checked == False:
+                self.neighbors.append(block)
+        
+    def move(self):
+        lst = []
+        for n in self.neighbors:
+            n.get_neighbor()
+            if len(n.neighbors) > 0:
+                lst.append(len(n.neighbors))
+
+        print(lst)
+        r = lst.index(min(lst))
+        return self.neighbors[r].id
+    
     def draw(self):
+        if self.checked :
+            self.color = "yellow"
         sur = pygame.Surface( (UNIT , UNIT) )
         sur.fill(self.color)
         sur_rect = sur.get_rect(topleft = (self.x , self.y))
@@ -78,20 +92,20 @@ def create_board():
     
 create_board()
 
-
+def move(knight_position):
+    for block in blocks:
+        if block.id == knight_position:
+            block.get_neighbor()
+            return block.move()
+            
 
 def draw(screen):
     screen.fill("#f59563")
     for block in blocks:
-
+        if block.id == knight_position:
+            block.checked = True
         block.draw()
-    
-        # text = pygame.font.Font(None , 30)
-        # text = text.render(f"{block.id}" , "white" , True)
 
-        # text_rect = text.get_rect(center = (block.x + (UNIT / 2) , block.y + (UNIT / 2)))
-        # screen.blit(text , text_rect)
-        
 
 pygame.init()
 screen = pygame.display.set_mode( (WIDTH , HEIGHT) )
@@ -105,7 +119,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-    
     draw(screen)
+    knight_position = move(knight_position)
     pygame.display.update()
-    clock.tick(10)
+    clock.tick(5)
