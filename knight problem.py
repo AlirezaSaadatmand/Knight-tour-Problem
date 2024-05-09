@@ -12,11 +12,20 @@ blocks = []
 
 count_block = 8
 
+
+first_block = 1
+
 class Block:
-    def __init__(self , x , y , id , color ):
+    def __init__(self , xpos , ypos , x , y , id , color):
+        
+        self.xpos = xpos
+        self.ypos = ypos
+        
         self.x = x
         self.y = y
         self.checked = False
+        
+        self.neighbers = []
 
         self.id = id
         self.color = color
@@ -24,17 +33,29 @@ class Block:
             self.text_color = "black"
         else:
             self.text_color = "white"
-
+    
+    def get_neighbor(self):
+        x = self.xpos
+        y = self.ypos
+        topLeft = [x-1 , y -2]
+        topRight = [x+1 , y -2]
+        buttomLeft = [x-1 , y +2]
+        buttomRight = [x-1 , y +2]
+        leftTop = [x-2 , y -1]
+        leftButtom = [x-2 , y +1]
+        rightTop = [x+2 , y -1]
+        rightButtom = [x+2 , y +1]
+        
+        for block in blocks:
+            if [block.xpos , block.ypos] in [topLeft , topRight , buttomLeft , buttomRight , leftTop , leftButtom , rightTop , rightButtom]:
+                self.neighbers.append(block)
+                
     def draw(self):
         sur = pygame.Surface( (UNIT , UNIT) )
         sur.fill(self.color)
         sur_rect = sur.get_rect(topleft = (self.x , self.y))
         screen.blit(sur , sur_rect)
 
-        text = pygame.font.Font(None , 30)
-        text = text.render(f"{self.id}" , self.text_color , True)
-        text_rect = text.get_rect(center = (self.x + (UNIT / 2) , self.y + (UNIT / 2)))
-        screen.blit(text , text_rect)
 
 
 def create_board():
@@ -42,10 +63,10 @@ def create_board():
     y = (HEIGHT / 2) - (UNIT * count_block / 2)
     id = 1
     color = "black"
-    for _ in range(count_block):
+    for i in range(count_block):
         x = (WIDTH / 2) - (UNIT * count_block / 2)
-        for _ in range(count_block):
-            blocks.append(Block(x , y , id , color))
+        for j in range(count_block):
+            blocks.append(Block( j , i , x , y , id , color))
             if id % 8 != 0:
                 if color == "white":
                     color = "black"
@@ -57,12 +78,21 @@ def create_board():
     
 create_board()
 
-def draw():
+
+
+def draw(screen):
     screen.fill("#f59563")
     for block in blocks:
-        print(block.text_color)
+
         block.draw()
     
+        # text = pygame.font.Font(None , 30)
+        # text = text.render(f"{block.id}" , "white" , True)
+
+        # text_rect = text.get_rect(center = (block.x + (UNIT / 2) , block.y + (UNIT / 2)))
+        # screen.blit(text , text_rect)
+        
+
 pygame.init()
 screen = pygame.display.set_mode( (WIDTH , HEIGHT) )
 screen.fill("#f59563")
@@ -76,6 +106,6 @@ while True:
             pygame.quit()
             exit()
     
-    draw()
+    draw(screen)
     pygame.display.update()
     clock.tick(10)
