@@ -13,7 +13,7 @@ blocks = []
 count_block = 8
 
 
-knight_position = 1
+knight_position = 3
 
 class Block:
     def __init__(self , xpos , ypos , x , y , id , color):
@@ -41,7 +41,7 @@ class Block:
         topLeft = [x-1 , y -2]
         topRight = [x+1 , y -2]
         buttomLeft = [x-1 , y +2]
-        buttomRight = [x-1 , y +2]
+        buttomRight = [x+1 , y +2]
         leftTop = [x-2 , y -1]
         leftButtom = [x-2 , y +1]
         rightTop = [x+2 , y -1]
@@ -57,10 +57,9 @@ class Block:
             n.get_neighbor()
             if len(n.neighbors) > 0:
                 lst.append(len(n.neighbors))
-
-        print(lst)
-        r = lst.index(min(lst))
-        return self.neighbors[r].id
+        if lst:
+            r = lst.index(min(lst))
+            return self.neighbors[r].id
     
     def draw(self):
         if self.checked :
