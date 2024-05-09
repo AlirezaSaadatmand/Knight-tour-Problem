@@ -2,8 +2,7 @@ This project solves the knight problem and uses pygamee for gui
 
 What is the knight problem :
 
-
-    The Knight's Tour problem is a classic problem in the field of computational mathematics and computer science. It is a puzzle where a chess knight is placed on an empty chess board and the goal is to move the knight to every square on the board exactly once without re-visiting any squares . (google)
+The Knight's Tour problem is a classic problem in the field of computational mathematics and computer science. It is a puzzle where a chess knight is placed on an empty chess board and the goal is to move the knight to every square on the board exactly once without re-visiting any squares . (google)
 
 you can start where ever you want and you can change the start position in the code
 
