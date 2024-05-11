@@ -15,7 +15,7 @@ here is a demo :
 
 
 
-it can also be big or small but you have to change the code yourself . 
+it can also be big or small but you have to change the code yourself :) 
 
 
 ![Screenshot 2024-05-11 035942](https://github.com/AlirezaSaadatmand/Knight-Problem/assets/157215281/19c1d882-0a4c-4e05-bbe1-f5d1137e7195)
