@@ -12,8 +12,9 @@ blocks = []
 
 count_block = 8
 
+knight_position = None
 
-knight_position = 1
+choosing = True
 
 class Block:
     def __init__(self , xpos , ypos , x , y , id , color):
@@ -29,10 +30,15 @@ class Block:
 
         self.id = id
         self.color = color
+        self.cover_color = color
         if self.color == "white":
             self.text_color = "black"
         else:
             self.text_color = "white"
+            
+        self.sur = pygame.Surface( (UNIT , UNIT) )
+        self.sur_rect = self.sur.get_rect(topleft = (self.x , self.y))
+        
     
     def get_neighbor(self):
         self.neighbors = []
@@ -62,17 +68,15 @@ class Block:
             return self.neighbors[r].id
         else:
             return False
+        
     def draw(self):
         if self.checked :
             self.color = "yellow"
-        sur = pygame.Surface( (UNIT , UNIT) )
-        sur.fill(self.color)
-        sur_rect = sur.get_rect(topleft = (self.x , self.y))
-        screen.blit(sur , sur_rect)
-        pygame.draw.rect(screen , "black", sur_rect,  1, 0)
+
+        self.sur.fill(self.color)
+        screen.blit(self.sur , self.sur_rect)
+        pygame.draw.rect(screen , "black", self.sur_rect,  1, 0)
         
-
-
 
 def create_board():
 
@@ -101,6 +105,14 @@ def move(knight_position):
             block.get_neighbor()
             return block.move()          
 
+def get_start(pos):
+    for block in blocks:
+        if block.sur_rect.collidepoint(pos):
+            block.color = "yellow"
+        else:
+            block.color = block.cover_color
+            
+
 def draw(screen):
     screen.fill("#f59563")
     for block in blocks:
@@ -113,24 +125,42 @@ screen.fill("#f59563")
 pygame.display.set_caption("KNIGHT PROBLEM")
 clock = pygame.time.Clock()
 
-running = True
+running = False
 
 while True:
+    position = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-    if running:    
-        knight_position = move(knight_position)
-        if knight_position == False:
+        if event.type == pygame.KEYDOWN: 
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
             for block in blocks:
-                if block.checked == False:
+                if block.sur_rect.collidepoint(position):
                     knight_position = block.id
-                    running = False
-        for block in blocks:
-            if block.id == knight_position:
-                block.checked = True
-                
+                    choosing = False
+                    running = True
+    if choosing:
+        get_start(position)
         draw(screen)
-    pygame.display.update()
-    clock.tick(5)
+        pygame.display.update()
+        clock.tick(60)
+    else:
+        if running:    
+            
+            knight_position = move(knight_position)
+            if knight_position == False:
+                for block in blocks:
+                    if block.checked == False:
+                        knight_position = block.id
+                        running = False
+            for block in blocks:
+                if block.id == knight_position:
+                    block.checked = True
+                    
+            draw(screen)
+        pygame.display.update()
+        clock.tick(5)
