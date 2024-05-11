@@ -69,6 +69,7 @@ class Block:
         sur.fill(self.color)
         sur_rect = sur.get_rect(topleft = (self.x , self.y))
         screen.blit(sur , sur_rect)
+        pygame.draw.rect(screen , "black", sur_rect,  1, 0)
 
 
 
