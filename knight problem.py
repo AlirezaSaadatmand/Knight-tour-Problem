@@ -6,11 +6,11 @@ size = pyautogui.size()
 WIDTH , HEIGHT = size
 WIDTH , HEIGHT = (WIDTH*9//10) , (HEIGHT*9//10)
 
-UNIT = 50
+UNIT = 80
 
 blocks = []
 
-count_block = 12
+count_block = 8
 
 
 knight_position = 1
